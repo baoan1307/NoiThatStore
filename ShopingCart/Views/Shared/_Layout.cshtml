@@ -1,0 +1,165 @@
+﻿<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>@ViewBag.Title</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    @Styles.Render("~/bundles/css")
+   
+    <link rel="shortcut icon" type="image/x-icon" href="~/Asset/FrontEnd/img/logo/logooo.png">
+
+
+
+    <link rel="stylesheet" href="~/Asset/Backend/bower_components/font-awesome/css/font-awesome.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,500,300,700,900' rel='stylesheet' type='text/css'>
+
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel='stylesheet' href="https://cdn.rawgit.com/daneden/animate.css/v3.1.0/animate.min.css">
+   
+    <script src="~/Asset/FrontEnd/js/vendor/modernizr-2.8.3.min.js"></script>
+</head>
+
+<body>
+   
+
+    @{Html.RenderAction("MainMenu", "Home");}
+    <div class="loader-wrapper">
+        <span class="loader"><span class="loader-inner"></span></span>
+    </div>
+
+
+
+    @RenderBody()
+    @{Html.RenderAction("Footer", "Home");}
+ 
+   
+    
+    <script src="~/Asset/FrontEnd/js/vendor/jquery-1.12.0.min.js"></script>
+   
+    <script src="~/Asset/FrontEnd/js/bootstrap.min.js"></script>
+
+    <script src="~/Asset/FrontEnd/js/ajax-mail.js"></script>
+ 
+    <script src="~/Asset/FrontEnd/js/owl.carousel.min.js"></script>
+  
+    <script src="~/Asset/FrontEnd/js/jquery.nivo.slider.pack.js"></script>
+  
+    <script src="~/Asset/FrontEnd/js/plugins.js"></script>
+    
+    <script src="~/Asset/FrontEnd/js/main.js"></script>
+    <script src="~/Asset/FrontEnd/js/jquery.validate.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+
+
+
+    <script>
+        $(window).on("load", function () {
+            $(".loader-wrapper").fadeOut("slow");
+        });
+
+    </script>
+    <script type="text/javascript">
+	$(document).ready(function () {
+		if ('@TempData["message"]' == "Added") {
+			$(".alert-success").show();
+			window.setTimeout(function() {
+				$(".alert-success").slideUp(1000, function(){
+					$(this).remove();
+				});
+			}, 5000);
+		}
+		if ('@TempData["message"]' == 'false') {
+			$(".alert-danger").show();
+			window.setTimeout(function() {
+				$(".alert-danger").slideUp(1000, function(){
+					$(this).remove();
+				});
+			}, 5000);
+		};
+		$(document).on('click',
+			'.wishlists',
+			function() {
+				debugger;
+
+				$.ajax({
+					url: '/Home/Create',
+					data: { ProductID: $(this).data('id') },
+					dataType: 'json',
+					type: 'POST',
+					success: (res) => {
+						$('.reload-wish').load('/Product/Index .reload-wish');
+					}
+				});
+			}
+		);
+		$(document).on('click',
+			'.wishlistDisLikes',
+			function() {
+				debugger;
+				$.ajax({
+					url: '/WishList/Remove',
+					data: { ProductID: $(this).data('id') },
+					dataType: 'json',
+					type: 'POST',
+					success: (res) => {
+						$('.reload-wish').load('/Product/Index .reload-wish');
+					}
+				});
+			});
+
+		window.carts = [];
+		$(".quantity").change(function () {
+			var productId = $(this).attr("productId");
+			var price = $(this).attr("price");
+			var quantity = $(this).val();
+			var total = parseInt(price) * parseInt(quantity);
+			$("#" + 'total_' + productId).text(total+"VND");
+			console.log(total)
+				var currentItem = carts.find(s => s.Id === productId);
+				if (currentItem != null) {
+					currentItem.Quantity = quantity;
+
+				} else {
+					carts.push({
+						Product: {
+							Id: productId
+						},
+						Quantity: quantity
+					});
+				}
+				$.ajax({
+					url: '/Cart/Update',
+					data: { cartModel: JSON.stringify(carts) },
+					dataType: 'json',
+					type: 'POST',
+					success: (res) => {
+						if (res == true) {
+						}
+					}
+				})
+			});
+    });
+
+    </script>
+
+
+    @RenderSection("footer", required: false)
+    @RenderSection("scripts", required: false)
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v4.0"></script>
+    <script src="https://cdn.rawgit.com/matthieua/WOW/1.0.1/dist/wow.min.js"></script>
+    <script>
+        new WOW().init();
+    </script>
+</body>
+
+
+
+</html>

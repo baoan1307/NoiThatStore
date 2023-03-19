@@ -1,0 +1,52 @@
+﻿
+@model Model.News
+@{
+    ViewBag.Title = "Chi Tiết Tin Tức";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="space-custom"></div>
+
+<div class="breadcrumb-area">
+    <div class="container">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-home"></i></a></li>
+            <li><a href="">Tin Tức</a></li>
+            <li class="active">Chi Tiết Tin Tức</li>
+        </ol>
+    </div>
+</div>
+
+<div class="blog-area">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-9 col-sm-9">
+                <div class="blog-wrapper blog-main mb-40">
+                    <div class="blog-img">
+                        <img alt="" src="@Model.Images">
+                    </div>
+                    <div class="blog-info">
+                        <h3><a href="#">@Model.Summary</a></h3>
+                        <div class="blog-meta blog-large">
+                            Ngày Đăng
+                            <span><a href="#"><i class="glyphicon glyphicon-calendar" aria-hidden="true"></i> @Model.CreateDate</a></span>
+
+                        </div>
+                        <p>
+                            @Html.Raw(HttpUtility.HtmlDecode(Model.Content))
+                        </p>
+
+                      
+
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@{Html.RenderAction("ShowProject", "Home");}
+
